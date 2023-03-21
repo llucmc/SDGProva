@@ -30,6 +30,7 @@ public class CountryController {
         String url = "https://restcountries.com/v3.1/all";
 
         //configure the paths
+        String countryCodesPath = "$[*].cca2";
         String officialNamePath = "$[*].name.official";
         String populationPath = "$[*].population";
 
@@ -38,6 +39,7 @@ public class CountryController {
         String jsonResponse = restTemplate.getForObject(url, String.class);
 
         //Save response parameters into lists
+        List<String> countryCodes = JsonPath.read(jsonResponse, countryCodesPath);
         List<String> officialNames = JsonPath.read(jsonResponse, officialNamePath);
         List<Integer> populations = JsonPath.read(jsonResponse, populationPath);
 
@@ -45,6 +47,7 @@ public class CountryController {
         List<Country> countries = new ArrayList<>();
         for (int i = 0; i < officialNames.size(); i++) {
             Country country = new Country();
+            country.setId(countryCodes.get(i));
             country.setName(officialNames.get(i));
             country.setPopulation(populations.get(i));
             countries.add(country);

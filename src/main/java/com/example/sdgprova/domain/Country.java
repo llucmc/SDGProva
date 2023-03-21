@@ -1,7 +1,7 @@
 package com.example.sdgprova.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,8 +9,7 @@ import jakarta.persistence.*;
 public class Country {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @Column
     private String name;
@@ -20,6 +19,8 @@ public class Country {
 
     public Country() {
     }
+
+
 
     public String getName() {
         return name;
@@ -35,5 +36,14 @@ public class Country {
 
     public void setPopulation(Integer population) {
         this.population = population;
+    }
+
+    @JsonIgnore
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
