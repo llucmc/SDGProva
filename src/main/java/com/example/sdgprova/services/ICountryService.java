@@ -1,6 +1,7 @@
 package com.example.sdgprova.services;
 
 import com.example.sdgprova.domain.Country;
+import com.example.sdgprova.services.DTOs.CountryDTO;
 
 import java.util.List;
 
@@ -10,6 +11,6 @@ public interface ICountryService {
     List<Country> findAllCountry();
 
     //Endpoint 1
-    List<Country> saveAllCountries(List<Country> countries); //update also by primarykey
+    List<Country> saveAllCountries(List<CountryDTO> countries); //update also by primarykey
 
 }

@@ -1,6 +1,8 @@
 package com.example.sdgprova.services.DTOs;
 
-public class CountryDTO {
+import java.io.Serializable;
+
+public class CountryDTO implements Serializable {
 
     private String id;
     private String name;
