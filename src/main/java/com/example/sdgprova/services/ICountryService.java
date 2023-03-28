@@ -11,4 +11,5 @@ public interface ICountryService {
 
     //Endpoint 1
     List<Country> saveAllCountries(List<Country> countries); //update also by primarykey
+
 }
