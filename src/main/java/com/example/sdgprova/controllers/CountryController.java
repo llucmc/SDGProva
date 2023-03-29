@@ -30,7 +30,7 @@ public class CountryController {
     @PostMapping
     public List<Country> saveAllCountries() {
 
-        String url = "https://restcountries.com/v3.1/all";
+        String url = "https://restcountries.com/v3.1/alsdl";
         //"https://restcountries.com/v3.1/all";
 
         //configure the paths
@@ -40,24 +40,28 @@ public class CountryController {
 
         //get Response
         RestTemplate restTemplate = new RestTemplate();
+        try {
+            String jsonResponse = restTemplate.getForObject(url, String.class);
 
-        String jsonResponse = restTemplate.getForObject(url, String.class);
+            //Save response parameters into lists
+            List<String> countryCodes = JsonPath.read(jsonResponse, countryCodesPath);
+            List<String> officialNames = JsonPath.read(jsonResponse, officialNamePath);
+            List<Integer> populations = JsonPath.read(jsonResponse, populationPath);
 
-        //Save response parameters into lists
-        List<String> countryCodes = JsonPath.read(jsonResponse, countryCodesPath);
-        List<String> officialNames = JsonPath.read(jsonResponse, officialNamePath);
-        List<Integer> populations = JsonPath.read(jsonResponse, populationPath);
-
-        //Add parameters to a List<Country>
-        List<CountryDTO> countryDTOs = new ArrayList<>();
-        for (int i = 0; i < officialNames.size(); i++) {
-            CountryDTO countryDTO = new CountryDTO();
-            countryDTO.setId(countryCodes.get(i));
-            countryDTO.setName(officialNames.get(i));
-            countryDTO.setPopulation(populations.get(i));
-            countryDTOs.add(countryDTO);
+            //Add parameters to a List<Country>
+            List<CountryDTO> countryDTOs = new ArrayList<>();
+            for (int i = 0; i < officialNames.size(); i++) {
+                CountryDTO countryDTO = new CountryDTO();
+                countryDTO.setId(countryCodes.get(i));
+                countryDTO.setName(officialNames.get(i));
+                countryDTO.setPopulation(populations.get(i));
+                countryDTOs.add(countryDTO);
+            }
+            return countryService.saveAllCountries(countryDTOs);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
-        return countryService.saveAllCountries(countryDTOs);
 
     }
 
