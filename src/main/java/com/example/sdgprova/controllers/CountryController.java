@@ -4,17 +4,23 @@ import com.example.sdgprova.domain.Country;
 import com.example.sdgprova.services.CountryService;
 import com.example.sdgprova.services.DTOs.CountryDTO;
 import com.jayway.jsonpath.JsonPath;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 @RestController
 @RequestMapping("/api/v1/data/country")
 public class CountryController {
+
+    final String COUNTRY_CODE_PATH = "$[*].cca2";
+    final String OFFICIAL_NAME_PATH = "$[*].name.official";
+    final String POPULATION_PATH = "$[*].population";
 
     private final CountryService countryService;
 
@@ -30,13 +36,10 @@ public class CountryController {
     @PostMapping
     public List<Country> saveAllCountries() {
 
-        String url = "https://restcountries.com/v3.1/alsdl";
+        String url = "https://restcountries.com/v3.1/all";
         //"https://restcountries.com/v3.1/all";
 
-        //configure the paths
-        String countryCodesPath = "$[*].cca2";
-        String officialNamePath = "$[*].name.official";
-        String populationPath = "$[*].population";
+
 
         //get Response
         RestTemplate restTemplate = new RestTemplate();
@@ -44,9 +47,9 @@ public class CountryController {
             String jsonResponse = restTemplate.getForObject(url, String.class);
 
             //Save response parameters into lists
-            List<String> countryCodes = JsonPath.read(jsonResponse, countryCodesPath);
-            List<String> officialNames = JsonPath.read(jsonResponse, officialNamePath);
-            List<Integer> populations = JsonPath.read(jsonResponse, populationPath);
+            List<String> countryCodes = JsonPath.read(jsonResponse, COUNTRY_CODE_PATH);
+            List<String> officialNames = JsonPath.read(jsonResponse, OFFICIAL_NAME_PATH);
+            List<Integer> populations = JsonPath.read(jsonResponse, POPULATION_PATH);
 
             //Add parameters to a List<Country>
             List<CountryDTO> countryDTOs = new ArrayList<>();
